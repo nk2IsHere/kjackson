@@ -5,49 +5,49 @@ import com.fasterxml.jackson.databind.node.*
 import java.math.BigDecimal
 import java.math.BigInteger
 
-private fun <T : Any> JsonNode?._nullOr(getNotNull: JsonNode.() -> T) : T?
-    = if (this == null || isNull) null else getNotNull()
+private fun <T : Any> JsonNode?.nullOr(getNotNull: JsonNode.() -> T) : T? =
+    if (this == null || isNull) null else getNotNull()
 
 val JsonNode.string: String get() = (this as? TextNode)?.textValue() ?: error("$this is not String")
-val JsonNode?.nullString: String? get() = _nullOr { string }
+val JsonNode?.nullString: String? get() = nullOr { string }
 
 val JsonNode.bool: Boolean get() = (this as? BooleanNode)?.booleanValue() ?: error("$this is not Boolean")
-val JsonNode?.nullBool: Boolean? get() = _nullOr { bool }
+val JsonNode?.nullBool: Boolean? get() = nullOr { bool }
 
 val JsonNode.byte: Byte get() = (this as? ShortNode)?.shortValue()?.toByte() ?: error("$this is not Byte")
-val JsonNode?.nullByte: Byte? get() = _nullOr { byte }
+val JsonNode?.nullByte: Byte? get() = nullOr { byte }
 
 val JsonNode.char: Char get() = (this as? TextNode)?.textValue()?.first() ?: error("$this is not Char")
-val JsonNode?.nullChar: Char? get() = _nullOr { char }
+val JsonNode?.nullChar: Char? get() = nullOr { char }
 
 val JsonNode.short: Short get() = (this as? ShortNode)?.shortValue() ?: error("$this is not Short")
-val JsonNode?.nullShort: Short? get() = _nullOr { short }
+val JsonNode?.nullShort: Short? get() = nullOr { short }
 
 val JsonNode.int: Int get() = (this as? IntNode)?.intValue() ?: error("$this is not Int")
-val JsonNode?.nullInt: Int? get() = _nullOr { int }
+val JsonNode?.nullInt: Int? get() = nullOr { int }
 
 val JsonNode.long: Long get() = (this as? LongNode)?.longValue() ?: error("$this is not Long")
-val JsonNode?.nullLong: Long? get() = _nullOr { long }
+val JsonNode?.nullLong: Long? get() = nullOr { long }
 
 val JsonNode.float: Float get() = (this as? FloatNode)?.floatValue()
     ?: (this as? DoubleNode)?.floatValue()
     ?: error("$this is not Float")
-val JsonNode?.nullFloat: Float? get() = _nullOr { float }
+val JsonNode?.nullFloat: Float? get() = nullOr { float }
 
 val JsonNode.double: Double get() = (this as? DoubleNode)?.doubleValue() ?: error("$this is not Double")
-val JsonNode?.nullDouble: Double? get() = _nullOr { double }
+val JsonNode?.nullDouble: Double? get() = nullOr { double }
 
 val JsonNode.bigInteger: BigInteger get() = (this as? BigIntegerNode)?.bigIntegerValue() ?: error("$this is not BigInteger")
-val JsonNode?.nullBigInteger: BigInteger? get() = _nullOr { bigInteger }
+val JsonNode?.nullBigInteger: BigInteger? get() = nullOr { bigInteger }
 
 val JsonNode.bigDecimal: BigDecimal get() = (this as? DecimalNode)?.decimalValue() ?: error("$this is not BigDecimal")
-val JsonNode?.nullBigDecimal: BigDecimal? get() = _nullOr { bigDecimal }
+val JsonNode?.nullBigDecimal: BigDecimal? get() = nullOr { bigDecimal }
 
 val JsonNode.array: ArrayNode get() = (this as? ArrayNode) ?: error("$this is not Array")
-val JsonNode?.nullArray: ArrayNode? get() = _nullOr { array }
+val JsonNode?.nullArray: ArrayNode? get() = nullOr { array }
 
 val JsonNode.obj: ObjectNode get() = (this as? ObjectNode) ?: error("$this is not Object")
-val JsonNode?.nullObj: ObjectNode? get() = _nullOr { obj }
+val JsonNode?.nullObj: ObjectNode? get() = nullOr { obj }
 
 val jsonNull: NullNode = NullNode.instance
 

@@ -2,7 +2,12 @@ package eu.nk2.kjackson
 
 import com.fasterxml.jackson.core.JsonGenerator
 import com.fasterxml.jackson.core.JsonParser
+import com.fasterxml.jackson.core.JsonToken
 import com.fasterxml.jackson.databind.*
+import com.fasterxml.jackson.databind.jsontype.TypeSerializer
+import com.fasterxml.jackson.core.type.WritableTypeId
+import com.fasterxml.jackson.databind.jsontype.TypeDeserializer
+
 
 class SerializationContext(
     private val generator: JsonGenerator
@@ -28,9 +33,16 @@ inline fun <T> jsonSerializer(crossinline serializer: (src: T, context: Serializ
     override fun serialize(value: T, generator: JsonGenerator, provider: SerializerProvider) {
         generator.writeTree(serializer(value, SerializationContext(generator)))
     }
+
+    override fun serializeWithType(value: T, generator: JsonGenerator, provider: SerializerProvider, typeSerializer: TypeSerializer) {
+        val typeId: WritableTypeId = typeSerializer.typeId(value, JsonToken.START_OBJECT)
+        typeSerializer.writeTypePrefix(generator, typeId)
+        serialize(value, generator, provider)
+        typeSerializer.writeTypeSuffix(generator, typeId)
+    }
 }
 
 inline fun <T> jsonDeserializer(crossinline deserializer: (src: JsonNode, context: DeserializationContext) -> T) = object : JsonDeserializer<T>() {
-    override fun deserialize(parser: JsonParser?, ctx: com.fasterxml.jackson.databind.DeserializationContext?): T =
-        deserializer(parser!!.readValueAsTree(), DeserializationContext(parser))
+    override fun deserialize(parser: JsonParser, ctx: com.fasterxml.jackson.databind.DeserializationContext): T =
+        deserializer(parser.readValueAsTree(), DeserializationContext(parser))
 }

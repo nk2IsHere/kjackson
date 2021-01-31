@@ -59,6 +59,7 @@ jar.enabled = true
 
 dependencies {
     implementation "com.fasterxml.jackson.module:jackson-module-kotlin"
+    testImplementation "org.junit.jupiter:junit-jupiter"
 }
 
 task sourcesJar(type: Jar, dependsOn: classes) {

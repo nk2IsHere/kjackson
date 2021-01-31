@@ -28,12 +28,11 @@ internal fun Any?.toJsonNode(): JsonNode {
         is Number -> toJson()
         is Char -> toJson()
         is Boolean -> toJson()
-//        else -> error("$this is not supported explicitly in jackson")
         else -> POJONode(this)
     }
 }
 
-private fun _jsonArray(values: Iterator<Any?>): ArrayNode =
+private fun jsonArray(values: Iterator<Any?>): ArrayNode =
     ArrayNode(
         JsonNodeFactory.instance,
         values.asSequence()
@@ -41,14 +40,14 @@ private fun _jsonArray(values: Iterator<Any?>): ArrayNode =
             .toList()
     )
 
-fun jsonArray(vararg values: Any?) = _jsonArray(values.iterator())
-fun jsonArray(values: Iterable<*>) = _jsonArray(values.iterator())
-fun jsonArray(values: Sequence<*>) = _jsonArray(values.iterator())
+fun jsonArray(vararg values: Any?) = jsonArray(values.iterator())
+fun jsonArray(values: Iterable<*>) = jsonArray(values.iterator())
+fun jsonArray(values: Sequence<*>) = jsonArray(values.iterator())
 
 fun Iterable<*>.toJsonArray() = jsonArray(this)
 fun Sequence<*>.toJsonArray() = jsonArray(this)
 
-private fun _jsonObject(values: Iterator<Pair<String, *>>): ObjectNode =
+private fun jsonObject(values: Iterator<Pair<String, *>>): ObjectNode =
     ObjectNode(
         JsonNodeFactory.instance,
         values.asSequence()
@@ -56,9 +55,9 @@ private fun _jsonObject(values: Iterator<Pair<String, *>>): ObjectNode =
             .toMap()
     )
 
-fun jsonObject(vararg values: Pair<String, *>) = _jsonObject(values.iterator())
-fun jsonObject(values: Iterable<Pair<String, *>>) = _jsonObject(values.iterator())
-fun jsonObject(values: Sequence<Pair<String, *>>) = _jsonObject(values.iterator())
+fun jsonObject(vararg values: Pair<String, *>) = jsonObject(values.iterator())
+fun jsonObject(values: Iterable<Pair<String, *>>) = jsonObject(values.iterator())
+fun jsonObject(values: Sequence<Pair<String, *>>) = jsonObject(values.iterator())
 
 fun Iterable<Pair<String, *>>.toJsonObject() = jsonObject(this)
 fun Sequence<Pair<String, *>>.toJsonObject() = jsonObject(this)
