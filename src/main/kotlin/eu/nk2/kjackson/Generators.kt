@@ -1,3 +1,5 @@
+package eu.nk2.kjackson
+
 import com.fasterxml.jackson.core.JsonGenerator
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.node.*
