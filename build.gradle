@@ -71,9 +71,11 @@ task javadocJar(type: Jar, dependsOn: javadoc) {
     from javadoc.destinationDir
 }
 
+apply plugin: 'maven-publish'
+
 artifacts {
     archives sourcesJar
-//        file "$buildDir/libs/${project.name}-${project.version}.jar"
+    file "$buildDir/libs/${project.name}-${project.version}.jar"
 }
 
 artifactory {
@@ -95,27 +97,14 @@ artifactory {
 publishing {
     publications {
         mavenJava(MavenPublication) {
+            groupId = project.group
+            version = project.version
+            artifactId = project.name
+
             from components.java
             artifact sourcesJar
-//                artifact "$buildDir/libs/${project.name}-${project.version}.jar"
+            artifact "$buildDir/libs/${project.name}-${project.version}.jar"
         }
-    }
-}
-
-apply plugin: 'eclipse'
-apply plugin: 'idea'
-
-eclipse {
-    classpath {
-        downloadSources = true
-    }
-}
-
-// Tell idea to output to build/classes/main instead of /out/
-idea {
-    module {
-        outputDir file('build/classes/main')
-        testOutputDir file('build/classes/test')
     }
 }
 
@@ -123,11 +112,14 @@ artifactory {
     contextUrl = "${artifactory_contextUrl}"
     publish {
         repository {
+            repoKey = "${artifactory_repoPublish}"
             username = "${artifactory_user}"
             password = "${artifactory_password}"
+            maven = true
         }
         defaults {
-            publishArtifacts = false
+            publications('mavenJava')
+            publishBuildInfo = false
         }
     }
     resolve {
